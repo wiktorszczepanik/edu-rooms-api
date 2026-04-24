@@ -7,7 +7,7 @@ public class Room {
 
     private static int _idCounter;
     public int Id { get; }
-    private string _name;
+    private string _name = string.Empty;
     public string Name {
         get => _name;
         set {
@@ -18,12 +18,12 @@ public class Room {
             _name = value;
         }
     }
-    private int _buildingCode;
-    public int BuildingCode {
+    private char _buildingCode;
+    public char BuildingCode {
         get => _buildingCode;
         set {
-            if (value <= 0) 
-                throw new ArgumentException("Building code must be greater then 0", nameof(value));
+            if (!char.IsAsciiLetterUpper(value)) 
+                throw new ArgumentException("Building code must be ASCII upper letter", nameof(value));
             _buildingCode = value;
         }
     }
@@ -38,10 +38,9 @@ public class Room {
         }
     }
     public bool HasProjector { get; set; }
-    public bool IsActive { get; }
-    private static List<Room> _rooms = new List<Room>();
+    public bool IsActive { get; set; }
 
-    public Room(string name, int buildingCode, int floor, int capacity, bool hasProjector) {
+    public Room(string name, char buildingCode, int floor, int capacity, bool hasProjector) {
         Id = ++_idCounter;
         Name = name;
         BuildingCode = buildingCode;
@@ -49,7 +48,6 @@ public class Room {
         Capacity = capacity;
         HasProjector = hasProjector;
         IsActive = true;
-        _rooms.Add(this);
     }
     
 }

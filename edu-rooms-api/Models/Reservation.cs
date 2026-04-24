@@ -13,7 +13,7 @@ public class Reservation {
             _roomId = value;
         }
     }
-    private string _organizerName;
+    private string _organizerName = string.Empty;
     public string OrganizerName {
         get => _organizerName;
         set {
@@ -23,7 +23,7 @@ public class Reservation {
         }
     }
 
-    private string _topic;
+    private string _topic = string.Empty;
     public string Topic {
         get => _topic;
         set => _topic = value ?? throw new ArgumentNullException(nameof(value));
@@ -44,11 +44,10 @@ public class Reservation {
         set {
             if (value < Date || value < EndTime)
                 throw new ArgumentException("End date cannot be earlier then Start date", nameof(value));
-            _endTime = _endTime;
+            _endTime = value;
         }
     }
     public Status Status { get; set; }
-    private List<Reservation> _reservations = new List<Reservation>();
 
     public Reservation(int roomId, string organizerName, string topic, DateTime startTime, DateTime endTime) {
         Id = ++_idCounter;
@@ -59,7 +58,6 @@ public class Reservation {
         StartTime = startTime;
         EndTime = endTime;
         Status = Status.Planned;
-        _reservations.Add(this);
     }
     
 }

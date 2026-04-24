@@ -1,3 +1,5 @@
+using edu_rooms_api.Storage;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,5 +18,7 @@ if (app.Environment.IsDevelopment()) {
 app.UseAuthorization();
 
 app.MapControllers();
+
+Data.Seed();
 
 app.Run();
