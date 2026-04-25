@@ -23,14 +23,33 @@ public class Room {
         IsActive = true;
     }
 
+    public static Room Create(string name, char buildingCode, int floor, int capacity) {
+        return new Room(
+            new Name(name), 
+            new BuildingCode(buildingCode), 
+            floor, 
+            new Capacity(capacity),
+            false
+        );
+    }
+    
     public static Room Create(string name, char buildingCode, int floor, int capacity, bool hasProjector) {
         return new Room(
             new Name(name), 
             new BuildingCode(buildingCode), 
             floor, 
-            new Capacity(capacity), 
+            new Capacity(capacity),
             hasProjector
         );
+    }
+
+    public void UpdateFields(string name, char buildingCode, int floor, int capacity, bool hasProjector, bool isActive) {
+        Name = new Name(name);
+        BuildingCode = new BuildingCode(buildingCode);
+        Floor = floor;
+        Capacity = new Capacity(capacity);
+        HasProjector = hasProjector;
+        IsActive = isActive;
     }
     
 }

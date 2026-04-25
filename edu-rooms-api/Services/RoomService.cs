@@ -42,4 +42,22 @@ public class RoomService {
             .ToList();
         return query.ToList();
     }
+
+    public Room? CreateRoom(string name, char buildingCode, int floor, int capacity, bool hasProjector) {
+        Room room;
+        try {
+            room = Room.Create(name, buildingCode, floor, capacity, hasProjector);
+            _rooms.Add(room);
+        } catch (Exception) {
+            return null;
+        }
+        return room;
+    }
+
+    public Room? UpdateRoom(int id, string name, char buildingCode, int floor, int capacity, bool hasProjector, bool isActive) {
+        var room = GetRoomById(id);
+        if (room == null) return null;
+        room.UpdateFields(name, buildingCode, floor, capacity, hasProjector, isActive);
+        return room;
+    }
 }
