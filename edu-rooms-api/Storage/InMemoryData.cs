@@ -2,22 +2,26 @@ using edu_rooms_api.Models;
 
 namespace edu_rooms_api.Storage;
 
-public class Data {
+public class InMemoryData {
 
     public static List<Room> Rooms = new();
     public static List<Reservation> Reservations = new();
 
+    public InMemoryData() {
+        Seed();
+    }
+
     public static void Seed() {
         // 5 rooms
-        Rooms.Add(new Room("Conference room", 'A', 1, 10, false));
-        Rooms.Add(new Room("Conference room", 'A', 2, 20, true));
-        Rooms.Add(new Room("Conference room", 'A', 2, 20, false));
-        Rooms.Add(new Room("Conference room", 'B', 1, 30, true));
-        Rooms.Add(new Room("Conference room", 'B', 2, 20, true));
+        Rooms.Add(Room.Create("Conference room", 'A', 1, 10, false));
+        Rooms.Add(Room.Create("Conference room", 'A', 2, 20, true));
+        Rooms.Add(Room.Create("Conference room", 'A', 2, 20, false));
+        Rooms.Add(Room.Create("Conference room", 'B', 1, 30, true));
+        Rooms.Add(Room.Create("Conference room", 'B', 2, 20, true));
         
         // 6 Reservations
         Reservations.Add(
-            new Reservation(
+            Reservation.Create(
                 1, 
                 "Jan Kowalski", 
                 "Wprowadzenie do baz danych", 
@@ -26,7 +30,7 @@ public class Data {
             )
         );
         Reservations.Add(
-            new Reservation(
+            Reservation.Create(
                 1, 
                 "Jan Kowalski", 
                 "Wprowadzenie do baz danych", 
@@ -35,7 +39,7 @@ public class Data {
             )
         );
         Reservations.Add(
-            new Reservation(
+            Reservation.Create(
                 2, 
                 "Adam Nowak", 
                 "Sieci komputerowe", 
@@ -44,7 +48,7 @@ public class Data {
             )
         );
         Reservations.Add(
-            new Reservation(
+            Reservation.Create(
                 3, 
                 "Adam Nowak", 
                 "Programowanie obiektowe", 
@@ -53,7 +57,7 @@ public class Data {
             )
         );
         Reservations.Add(
-            new Reservation(
+            Reservation.Create(
                 4, 
                 "Jan Kowalski", 
                 "Programowanie obiektowe", 
@@ -62,7 +66,7 @@ public class Data {
             )
         );
         Reservations.Add(
-            new Reservation(
+            Reservation.Create(
                 5, 
                 "Adam Nowak", 
                 "Programowanie obiektowe", 

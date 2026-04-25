@@ -1,5 +1,5 @@
 using edu_rooms_api.DTOs;
-using edu_rooms_api.Storage;
+using edu_rooms_api.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace edu_rooms_api.Controllers;
@@ -8,22 +8,20 @@ namespace edu_rooms_api.Controllers;
 [Route("api/[controller]")]
 public class RoomsController : ControllerBase {
 
+    private RoomService _roomService;
+
+    public RoomsController(RoomService roomService) {
+        _roomService = roomService;
+    }
+
     [HttpGet]
     public IActionResult Get([FromQuery] int? minCapacity, [FromQuery] bool? hasProjector, [FromQuery] bool? activeOnly) {
-        var query = Data.Rooms.AsQueryable();
-        if (minCapacity.HasValue) {
-            query = query.Where(room => room.Capacity >= minCapacity);
-        }
-        if (hasProjector.HasValue) {
-            query = query.Where(room => room.HasProjector == hasProjector.Value);
-        }
-        if (activeOnly.HasValue) {
-            query = query.Where(room => room.IsActive == activeOnly.Value);
-        }
-        var result = query.Select(room => new RoomDto {
+        var rooms = _roomService.GetRooms(minCapacity, hasProjector, activeOnly);
+        var result = rooms.Select(room => new RoomResponseDto {
             Id = room.Id,
-            Name = room.Name,
-            Capacity = room.Capacity,
+            Name = room.Name.Value,
+            BuildingCode = room.BuildingCode.Value,
+            Capacity = room.Capacity.Value,
             HasProjector = room.HasProjector,
             IsActive = room.IsActive
         });
@@ -33,15 +31,13 @@ public class RoomsController : ControllerBase {
     [HttpGet]
     [Route("{id}")]
     public IActionResult GetById([FromRoute] int id) {
-        var query = Data.Rooms.AsQueryable();
-        var room = query.FirstOrDefault(room => room.Id == id);
-        if (room == null) {
-            return NotFound();
-        }
-        var result = new RoomDto {
+        var room = _roomService.GetRoomById(id);
+        if (room == null) return NotFound();
+        var result = new RoomResponseDto {
             Id = room.Id,
-            Name = room.Name,
-            Capacity = room.Capacity,
+            Name = room.Name.Value,
+            BuildingCode = room.BuildingCode.Value,
+            Capacity = room.Capacity.Value,
             HasProjector = room.HasProjector,
             IsActive = room.IsActive
         };
@@ -51,20 +47,18 @@ public class RoomsController : ControllerBase {
     [HttpGet]
     [Route("/building/{buildingCode}")]
     public IActionResult GetByBuildingCode([FromRoute] char buildingCode) {
-        if (!char.IsAsciiLetter(buildingCode)) {
-            return BadRequest("Code as an one letter ascii");
+        var rooms = _roomService.GetRoomsByBuildingCode(buildingCode);
+        if (rooms == null) {
+            return BadRequest("Invalid building code format");
         }
-        var code = char.ToUpper(buildingCode);
-        var query = Data.Rooms
-            .Where(room => room.BuildingCode == code)
-            .ToList();
-        if (query.Count == 0) {
+        if (rooms.Count == 0) {
             return NoContent();
         }
-        var result = query.Select(room => new RoomDto {
+        var result = rooms.Select(room => new RoomResponseDto {
             Id = room.Id,
-            Name = room.Name,
-            Capacity = room.Capacity,
+            Name = room.Name.Value,
+            BuildingCode = room.BuildingCode.Value,
+            Capacity = room.Capacity.Value,
             HasProjector = room.HasProjector,
             IsActive = room.IsActive
         });

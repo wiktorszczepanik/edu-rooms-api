@@ -1,3 +1,5 @@
+using edu_rooms_api.Models;
+using edu_rooms_api.Services;
 using edu_rooms_api.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddScoped<RoomService>();
+builder.Services.AddSingleton<IList<Room>>(InMemoryData.Rooms);
 
 var app = builder.Build();
 
@@ -19,6 +24,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-Data.Seed();
+InMemoryData.Seed();
 
 app.Run();
