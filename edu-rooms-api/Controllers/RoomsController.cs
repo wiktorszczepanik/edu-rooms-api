@@ -17,7 +17,7 @@ public class RoomsController : ControllerBase {
     [HttpGet]
     public IActionResult Get([FromQuery] int? minCapacity, [FromQuery] bool? hasProjector, [FromQuery] bool? activeOnly) {
         var rooms = _roomService.GetRooms(minCapacity, hasProjector, activeOnly);
-        var result = rooms.Select(room => new RoomResponseDto {
+        var result = rooms.Select(room => new ReadRoomDto {
             Id = room.Id,
             Name = room.Name.Value,
             BuildingCode = room.BuildingCode.Value,
@@ -33,7 +33,7 @@ public class RoomsController : ControllerBase {
     public IActionResult GetById([FromRoute] int id) {
         var room = _roomService.GetRoomById(id);
         if (room == null) return NotFound();
-        var result = new RoomResponseDto {
+        var result = new ReadRoomDto {
             Id = room.Id,
             Name = room.Name.Value,
             BuildingCode = room.BuildingCode.Value,
@@ -54,7 +54,7 @@ public class RoomsController : ControllerBase {
         if (rooms.Count == 0) {
             return NoContent();
         }
-        var result = rooms.Select(room => new RoomResponseDto {
+        var result = rooms.Select(room => new ReadRoomDto {
             Id = room.Id,
             Name = room.Name.Value,
             BuildingCode = room.BuildingCode.Value,
@@ -80,7 +80,7 @@ public class RoomsController : ControllerBase {
         if (room == null) {
             return BadRequest();
         }
-        var result = new RoomResponseDto {
+        var result = new ReadRoomDto {
             Id = room.Id,
             Name = room.Name.Value,
             BuildingCode = room.BuildingCode.Value,
@@ -109,7 +109,7 @@ public class RoomsController : ControllerBase {
         if (room == null) {
             return NotFound();
         }
-        var result = new RoomResponseDto {
+        var result = new ReadRoomDto {
             Id = room.Id,
             Name = room.Name.Value,
             BuildingCode = room.BuildingCode.Value,

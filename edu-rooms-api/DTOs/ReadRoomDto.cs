@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace edu_rooms_api.DTOs;
 
-public class RoomResponseDto {
+public class ReadRoomDto {
     
     [Required]
     [Range(1, int.MaxValue)]

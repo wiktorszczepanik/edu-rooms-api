@@ -1,0 +1,37 @@
+using edu_rooms_api.Models;
+
+namespace edu_rooms_api.Services;
+
+public class ReservationService {
+
+    private IList<Reservation> _reservations;
+
+    public ReservationService(IList<Reservation> reservations) {
+        _reservations = reservations;
+    }
+
+    public IList<Reservation> GetReservations(DateTime? date, Status? status, RoomId? roomId) {
+        var query = _reservations.AsQueryable();
+        if (date.HasValue) {
+            var dayStart = date.Value.Date;
+            var dayEnd = date.Value.Date.AddDays(1).AddTicks(-1);
+            query = query.Where(reservation => 
+                dayStart <= reservation.StartTime.Value 
+                && dayEnd >= reservation.EndTime.Value
+            );
+        }
+        if (status.HasValue) {
+            query = query.Where(reservation => reservation.Status == status);
+        }
+        if (roomId != null) {
+            query = query.Where(reservation => reservation.RoomId == roomId);
+        }
+        return query.ToList();
+    }
+
+    public Reservation? GetReservationById(int id) {
+        var query = _reservations.AsQueryable();
+        var reservation = query.FirstOrDefault(reservation => reservation.Id == id);
+        return reservation;
+    }
+}
