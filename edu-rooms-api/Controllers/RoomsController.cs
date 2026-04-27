@@ -119,5 +119,13 @@ public class RoomsController : ControllerBase {
         };
         return Ok(result);
     }
-    
+
+    [HttpDelete]
+    [Route("{id}")]
+    public IActionResult Delete(int id) {
+        var room = _roomService.DeleteRoom(id);
+        if (room == null) return NotFound();
+        if ((bool) !room) return Conflict();
+        return NoContent();
+    }
 }

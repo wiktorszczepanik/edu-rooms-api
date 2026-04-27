@@ -20,7 +20,7 @@ public class Reservation {
         Date = reservationDate;
         StartTime = startTime;
         EndTime = endTime;
-        Status = Status.Planned;
+        Status = Status.Confirmed;
     }
 
     public static Reservation Create(int roomId, string organizerName, string topic, DateTime startTime, DateTime endTime) {
@@ -34,5 +34,9 @@ public class Reservation {
             new EndTime(reservationDate, startTime, endTime)
         );
     }
-    
+
+    public void UpdateFields(string organizerName, string topic) {
+        OrganizerName = new OrganizerName(organizerName);
+        Topic = new Topic(topic);
+    }
 }

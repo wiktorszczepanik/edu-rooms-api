@@ -1,7 +1,6 @@
 using edu_rooms_api.DTOs;
 using edu_rooms_api.Models;
 using edu_rooms_api.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace edu_rooms_api.Controllers;
@@ -46,6 +45,59 @@ public class ReservationsController : ControllerBase {
         return Ok(result);
     }
 
-    // [HttpPost]
-    // public IActionResult Post() {}
+    [HttpPost]
+    public IActionResult Post(CreateReservationDto createDto) {
+        if (!ModelState.IsValid) {
+            return BadRequest(ModelState);
+        }
+        Reservation? reservation;
+        try {
+            reservation = _reservationService.CreateReservation(
+                createDto.RoomId,
+                createDto.OrganizerName,
+                createDto.Topic,
+                createDto.StartTime,
+                createDto.EndTime
+            );
+        } catch (Exception) {
+            return Conflict();
+        }
+        if (reservation == null) return NotFound();
+        var result = new ReadReservationDto {
+            Id = reservation.Id,
+            RoomId = reservation.RoomId.Value,
+            OrganizerName = reservation.OrganizerName.Value,
+            Topic = reservation.Topic.Value,
+            StartTime = reservation.StartTime.Value,
+            EndTime = reservation.EndTime.Value
+        };
+        return Ok(result);
+    }
+
+    [HttpPut]
+    [Route("{id}")]
+    public IActionResult Put(int id, UpdateReservationDto updateDto) {
+        if (!ModelState.IsValid) {
+            return BadRequest(ModelState);
+        }
+        var reservation = _reservationService.UpdateReservation(id, updateDto.OrganizerName, updateDto.Topic);
+        if (reservation == null) return NotFound();
+        var result = new ReadReservationDto {
+            Id = reservation.Id,
+            RoomId = reservation.RoomId.Value,
+            OrganizerName = reservation.OrganizerName.Value,
+            Topic = reservation.Topic.Value,
+            StartTime = reservation.StartTime.Value,
+            EndTime = reservation.EndTime.Value
+        };
+        return Ok(result);
+    }
+
+    [HttpDelete]
+    [Route("{id}")]
+    public IActionResult Delete(int id) {
+        var reservation = _reservationService.DeleteReservation(id);
+        if (reservation) return NotFound();
+        return NoContent();
+    }
 }

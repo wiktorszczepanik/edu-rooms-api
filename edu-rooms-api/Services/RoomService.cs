@@ -5,9 +5,11 @@ namespace edu_rooms_api.Services;
 public class RoomService {
 
     private IList<Room> _rooms;
+    private IList<Reservation> _reservations;
 
-    public RoomService(IList<Room> rooms) {
+    public RoomService(IList<Room> rooms, IList<Reservation> reservations) {
         _rooms = rooms;
+        _reservations = reservations;
     }
 
     public IList<Room> GetRooms(int? minCapacity, bool? hasProjector, bool? activeOnly) {
@@ -59,5 +61,16 @@ public class RoomService {
         if (room == null) return null;
         room.UpdateFields(name, buildingCode, floor, capacity, hasProjector, isActive);
         return room;
+    }
+
+    public bool? DeleteRoom(int id) {
+        var room = GetRoomById(id);
+        if (room == null) return null;
+        var overlapping = _reservations
+            .Where(reservation => reservation.StartTime.Value >= DateTime.Now)
+            .Any(reservation => reservation.RoomId.Value == room.Id);
+        if (overlapping) return false;
+        _rooms.Remove(room);
+        return true;
     }
 }

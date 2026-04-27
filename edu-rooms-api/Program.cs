@@ -13,6 +13,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddScoped<RoomService>();
 builder.Services.AddSingleton<IList<Room>>(InMemoryData.Rooms);
+builder.Services.AddSingleton<IList<Reservation>>(InMemoryData.Reservations);
 
 var app = builder.Build();
 
