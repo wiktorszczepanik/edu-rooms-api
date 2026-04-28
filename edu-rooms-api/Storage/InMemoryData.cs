@@ -12,12 +12,13 @@ public class InMemoryData {
     }
 
     public static void Seed() {
-        // 5 rooms
+        // 6 rooms
         Rooms.Add(Room.Create("Conference room", 'A', 1, 10, false));
         Rooms.Add(Room.Create("Conference room", 'A', 2, 20, true));
         Rooms.Add(Room.Create("Conference room", 'A', 2, 20, false));
         Rooms.Add(Room.Create("Conference room", 'B', 1, 30, true));
         Rooms.Add(Room.Create("Conference room", 'B', 2, 20, true));
+        Rooms.Add(Room.Create("Conference room", 'C', 3, 40, true));
         
         // 6 Reservations
         Reservations.Add(

@@ -13,21 +13,21 @@ public class ReservationService {
         _rooms = rooms;
     }
 
-    public IList<Reservation> GetReservations(DateTime? date, Status? status, RoomId? roomId) {
+    public IList<Reservation> GetReservations(DateTime? date, Status? status, int? roomId) {
         var query = _reservations.AsQueryable();
         if (date.HasValue) {
             var dayStart = date.Value.Date;
             var dayEnd = date.Value.Date.AddDays(1).AddTicks(-1);
-            query = query.Where(reservation => 
-                dayStart <= reservation.StartTime.Value 
-                && dayEnd >= reservation.EndTime.Value
+            query = query.Where(reservation =>
+                reservation.StartTime.Value < dayEnd 
+                && reservation.EndTime.Value > dayStart
             );
         }
         if (status.HasValue) {
             query = query.Where(reservation => reservation.Status == status);
         }
-        if (roomId != null) {
-            query = query.Where(reservation => reservation.RoomId == roomId);
+        if (roomId.HasValue) {
+            query = query.Where(reservation => reservation.RoomId.Value == roomId);
         }
         return query.ToList();
     }

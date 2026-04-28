@@ -45,14 +45,11 @@ public class RoomsController : ControllerBase {
     }
 
     [HttpGet]
-    [Route("/building/{buildingCode}")]
+    [Route("building/{buildingCode}")]
     public IActionResult GetByBuildingCode([FromRoute] char buildingCode) {
         var rooms = _roomService.GetRoomsByBuildingCode(buildingCode);
         if (rooms == null) {
             return BadRequest("Invalid building code format");
-        }
-        if (rooms.Count == 0) {
-            return NoContent();
         }
         var result = rooms.Select(room => new ReadRoomDto {
             Id = room.Id,

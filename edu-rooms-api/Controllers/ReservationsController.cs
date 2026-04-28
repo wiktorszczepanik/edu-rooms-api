@@ -16,13 +16,14 @@ public class ReservationsController : ControllerBase {
     }
 
     [HttpGet]
-    public IActionResult Get([FromQuery] DateTime? date, [FromQuery] Status? status, [FromQuery] RoomId? roomId) {
+    public IActionResult Get([FromQuery] DateTime? date, [FromQuery] Status? status, [FromQuery] int? roomId) {
         var reservations = _reservationService.GetReservations(date, status, roomId);
         var results = reservations.Select(reservation => new ReadReservationDto {
             Id = reservation.Id,
             RoomId = reservation.RoomId.Value,
             OrganizerName = reservation.OrganizerName.Value,
             Topic = reservation.Topic.Value,
+            ReservationTime = reservation.ReservationTime,
             StartTime = reservation.StartTime.Value,
             EndTime = reservation.EndTime.Value,
         });
@@ -39,6 +40,7 @@ public class ReservationsController : ControllerBase {
             RoomId = reservation.RoomId.Value,
             OrganizerName = reservation.OrganizerName.Value,
             Topic = reservation.Topic.Value,
+            ReservationTime = reservation.ReservationTime,
             StartTime = reservation.StartTime.Value,
             EndTime = reservation.EndTime.Value
         };
@@ -68,6 +70,7 @@ public class ReservationsController : ControllerBase {
             RoomId = reservation.RoomId.Value,
             OrganizerName = reservation.OrganizerName.Value,
             Topic = reservation.Topic.Value,
+            ReservationTime = reservation.ReservationTime,
             StartTime = reservation.StartTime.Value,
             EndTime = reservation.EndTime.Value
         };
@@ -97,7 +100,7 @@ public class ReservationsController : ControllerBase {
     [Route("{id}")]
     public IActionResult Delete(int id) {
         var reservation = _reservationService.DeleteReservation(id);
-        if (reservation) return NotFound();
+        if (!reservation) return NotFound();
         return NoContent();
     }
 }

@@ -7,7 +7,7 @@ public class StartTime {
     public StartTime(DateTime reservationDate, DateTime startTime) {
         if (startTime < reservationDate)
             throw new ArgumentException("Start date cannot be older then reservation date", nameof(startTime));
-        Value = reservationDate;
+        Value = startTime;
     }
     
 }

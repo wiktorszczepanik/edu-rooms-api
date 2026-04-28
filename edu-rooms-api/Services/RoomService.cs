@@ -20,7 +20,7 @@ public class RoomService {
         if (hasProjector.HasValue) {
             query = query.Where(room => room.HasProjector == hasProjector.Value);
         }
-        if (activeOnly.HasValue) {
+        if (activeOnly.HasValue && (bool) activeOnly) {
             query = query.Where(room => room.IsActive == activeOnly.Value);
         }
         return query.ToList();
@@ -40,8 +40,7 @@ public class RoomService {
             return null;
         }
         var query = _rooms
-            .Where(room => room.BuildingCode == code)
-            .ToList();
+            .Where(room => room.BuildingCode.Value == code.Value);
         return query.ToList();
     }
 

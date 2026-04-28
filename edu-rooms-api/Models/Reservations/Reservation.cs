@@ -7,17 +7,17 @@ public class Reservation {
     public RoomId RoomId { get; private set; }
     public OrganizerName OrganizerName { get; private set; }
     public Topic Topic { get; private set; }
-    public DateTime Date { get; private set; }
+    public DateTime ReservationTime { get; private set; }
     public StartTime StartTime { get; private set; }
     public EndTime EndTime { get; private set; }
     public Status Status { get; set; }
 
-    private Reservation(RoomId roomId, OrganizerName organizerName, Topic topic, DateTime reservationDate, StartTime startTime, EndTime endTime) {
+    private Reservation(RoomId roomId, OrganizerName organizerName, Topic topic, DateTime reservationReservationTime, StartTime startTime, EndTime endTime) {
         Id = ++_idCounter;
         RoomId = roomId;
         OrganizerName = organizerName;
         Topic = topic;
-        Date = reservationDate;
+        ReservationTime = reservationReservationTime;
         StartTime = startTime;
         EndTime = endTime;
         Status = Status.Confirmed;

@@ -15,6 +15,8 @@ public class ReadReservationDto {
     [StringLength(100, MinimumLength = 1)]
     public required string Topic { get; set; }
     [Required]
+    public DateTime ReservationTime { get; set; }
+    [Required]
     public DateTime StartTime { get; set; }
     [Required]
     public DateTime EndTime { get; set; }
